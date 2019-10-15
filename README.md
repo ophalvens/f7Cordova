@@ -1,5 +1,17 @@
 # F7Cordova
 
+## Stappen om tot deze versie van de app te komen :
+ * framework7-cli cordova installeren
+ ```
+ npm i framework7-cli cordova -g
+ ```
+ * aanmaken van de app via de CLI
+ ```
+ framework7 create --ui
+ ```
+ * kies in de UI die verschijnt de gewenste opties. 
+   De opties staan hieronder beschreven.
+
 ## Framework7 CLI Options
 
 Framework7 app created with following options:
