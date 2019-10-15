@@ -1,5 +1,6 @@
 # F7Cordova
-
+---
+# Stap 1
 ## Stappen om tot deze versie van de app te komen :
  * framework7-cli cordova installeren
  ```
@@ -13,7 +14,7 @@
    De opties staan hieronder beschreven.
 
 ---
-
+# Stap 2
 ## 'Barebones' Framework7-app
 
 In deze branch zijn een aantal bestanden en opties verwijderd, zodat we een meer 'lege' app hebben, vanwaar we kunnen opbouwen.
@@ -43,6 +44,44 @@ In deze branch zijn een aantal bestanden en opties verwijderd, zodat we een meer
 ## Toegevoegde bestanden
  * gegevens.html
  * locatie.html
+
+---
+# Stap 3
+## Locatie toevoegen
+ *  de locatie plugin toevoegen met 
+ ```
+ cordova plugin add cordova-plugin-geolocation
+ ```
+ Meer informatie over deze plugin vind je op : https://cordova.apache.org/docs/en/latest/reference/cordova-plugin-geolocation/index.html
+
+
+## 3 Nieuwe functies toegevoegd 
+  * **showPosition** : toont details van je positie wanneer een positie object returned (*app.js*)
+  * **positionError** : toont een boodschap indien er een fout is met de locatie (*app.js*)
+  * **getLocatie** 
+    * start de watch van de positie (*locatie.html*)
+    * zie de link tussen **@click** en de methods in dit script
+    
+Test als je kan de app op je eigen toestel :
+```
+cordova run android
+```
+Als je niet op je eigen toestel kan testen :
+```
+cordova emulate android
+```
+Hiervoor moet je wel al minstens 1 virtueel toestel hebben toegevoegd via bv Android Studio.
+
+Enkele caveats :
+
+* Test eerst of je emulator wel kan opstarten
+* Op sommige versies van je emulator moet je
+  * in het virtuele toestel de developers options unlocken
+  * USB debugging aanzetten (SETTINGS > DEVELOPER OPTIONS)
+  * toestemming geven aan je computer wanneer je virtuele toestel een melding geeft ivm het toestaan van adb toegang naar jouw computer
+
+
+
 
 ---
 ## Framework7 CLI Options
