@@ -60,6 +60,16 @@ var app = new Framework7({
         cordovaApp.init(f7);
       }
     },
+    pageInit: function (page) {
+      // andere methode om functies aan een knop te hangen
+      if (page.route.name === "gegevens") {
+          getList();
+          $$('#btnVoegToe').on('click', function () {
+              voegToe();
+          });
+      }
+
+    }
   },
 });
 
@@ -94,5 +104,119 @@ function positionError(error) {
           // timed out
           app.dialog.alert('Het duurt te lang om je positie te vinden. Zit je in een tunnel? Of zit je nog in de school? Op een heel aantal toestellen kan de positie sneller bepaald worden als je ook je wifi aanzet.', 'Positie timeout');
   }
-  
 };
+
+// ---------- uitbreiding voorbeeld stap-4 gegevens ---------------- //
+
+var apiAddress = "https://ophalvens.net/mi3/testdb.php?";
+var opties = {
+  method: "POST", // *GET, POST, PUT, DELETE, etc.
+  mode: "cors", // no-cors, *cors, same-origin
+  cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+  credentials: "omit", // include, *same-origin, omit
+  headers: {
+    "Content-Type": "application/json",
+    "Accept": "application/json"
+  }
+};
+  
+function getList() {
+  // de data opvragen van de andere server (zie les 2)
+
+  // body data type must match "Content-Type" header
+  opties.body = JSON.stringify({
+    format: "json",
+    table: "producten",
+    bewerking: "get"
+  }); 
+
+  // test de api
+  fetch(apiAddress, opties)
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(responseData){
+      // de verwerking van de data
+      var list = responseData.data;
+
+      if (list.length > 0) {
+        // er zit minstens 1 item in list, we geven dit ook onmiddelijk weer
+        let tlines = "";
+        for (let i = 0, len = list.length; i < len; i++) {
+            tlines += `<div class='row'><span class='col'>${list[i].PR_naam}</span><span class='col'>${ list[i].prijs}</span><button onClick='sendAjax(${list[i].PR_ID});' class='button button-fill button-raised button-small color-orange col'>Verwijder</button></div>`;
+        }
+
+        $$("#pList").html(tlines);
+      } else {
+        app.dialog.alert("Producten konden niet opgevraagd worden");
+      }
+
+    })
+    .catch(function(error) {
+      // verwerk de fout
+      app.dialog.alert("fout : " + error);
+    });
+
+  return true;
+}
+
+function sendAjax(id) {
+  // fetch request opzetten om een item te verwijderen.
+  // body data type must match "Content-Type" header
+  opties.body = JSON.stringify({
+    format: "json",
+    table: "producten",
+    bewerking: "delete",
+    id: id
+  });
+
+  fetch(apiAddress, opties)
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(responseData){
+      // de verwerking van de data
+      app.dialog.alert("Die zien we nooit meer ... terug!", "Item verwijderd");
+      // refresh de lijst
+      getList();
+
+    })
+    .catch(function(error) {
+      // verwerk de fout
+      app.dialog.alert('POST failed. :' + errorThrown, "Item toegevoegd");
+    });
+
+
+
+}
+
+function voegToe(){
+  let cat = $$('input[name=categorie]:checked').val();
+  // body data type must match "Content-Type" header
+  opties.body = JSON.stringify({
+    format: "json",
+    table: "producten",
+    bewerking: "add",
+    PR_naam: $$("#PR_naam").val(),
+    prijs:  $$("#prijs").val(),
+    PR_CT_ID: (cat == "fruit" ? 1 : 2)
+  });
+
+  fetch(apiAddress, opties)
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(responseData){
+      if(responseData.status === "fail") {
+        app.dialog.alert("Sorry, probeer nog een keer met meer data ...", responseData.error);
+      } else {
+        app.dialog.alert("ok", "Product toegevoegd");
+      }
+      // refresh de lijst
+      getList();
+    })
+    .catch(function(error) {
+      // verwerk de fout
+      app.dialog.alert('POST failed. :' + errorThrown, "Toevoegen is niet gelukt");
+    });
+}

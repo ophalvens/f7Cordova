@@ -61,7 +61,7 @@ In deze branch zijn een aantal bestanden en opties verwijderd, zodat we een meer
   * **getLocatie** 
     * start de watch van de positie (*locatie.html*)
     * zie de link tussen **@click** en de methods in dit script
-    
+
 Test als je kan de app op je eigen toestel :
 ```
 cordova run android
@@ -80,7 +80,30 @@ Enkele caveats :
   * USB debugging aanzetten (SETTINGS > DEVELOPER OPTIONS)
   * toestemming geven aan je computer wanneer je virtuele toestel een melding geeft ivm het toestaan van adb toegang naar jouw computer
 
+---
+# Stap 4 
+## Gegevens opvragen
 
+
+* Let op de ```content-security-policy``` in ```index.html``` : jouw domein moet daar in staan of requests gaan daar niet geraken.
+
+* **`/www/`**
+  * de code van je Cordova project
+* **`/php/`**
+  * 2 php bestanden die je eigen online webserver moet plaatsen
+  * 2 sql dumps die je in PHPMyAdmin kan importeren om de tabellen van het voorbeeld aan te maken
+  * Dit zijn dezelfde bestanden als in deel 2 van les 2
+
+### Geen php bestanden in je Cordova app
+Een php pagina wordt enkel verwerkt als die vanop een webserver met php wordt bevraagd. Hoewel er in het voorbeeld 2 php bestanden in de map `/php` zitten, maken deze bestanden geen deel uit van je Cordova project.
+
+### Je eigen server
+Hoewel je met het voorbeeld van de les kan werken, wil je waarschijnlijk met je eigen code experimenteren voor jouw project.
+
+* Zoek een eigen php/mysql server.
+* Plaats een aangepaste versie van `/php/testdb.php` en `/php/dbcon.php` op jouw server. Let daarbij vooral op de aangepaste connectiegegevens in het bestand `/php/dbcon.php`.
+* Voeg de tabellen categorieen en producten toe aan je online databank. In PHPMyAdmin kan je sql bestanden importeren.
+* Pas het bestand `js/app.js` aan, zodat de ajax requests verwijzen naar het bestand `testdb.php` op jouw server.
 
 
 ---
